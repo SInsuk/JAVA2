@@ -13,28 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-class ActionEvent1 implements ActionListener{
-	//객체 선언
-	private JTextField input;
-	private JTextArea output;
-	
-	public ActionEvent1(JTextField input, JTextArea output) {
-		this.input = input;
-        this.output = output;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		try {
-			if()
-		}
-		catch (ArithmeticException e){
-			System.out.println("길이(숫자를 입력하셔야 합니다.)");
-		}
-	}
-	
-}
-
 class Exam2 extends JFrame{
 	//객체 선언
 	private JTextField input;
@@ -91,10 +69,16 @@ class Exam2 extends JFrame{
 		ct.add(jp3);
 		
 		//컴포넌트에 리스너 등록
-		bt1.addActionListener(new ActionEvent1(input, output));
-		bt2.addActionListener(new ActionEvent1(input, output));
-		bt3.addActionListener(new ActionEvent1(input, output));
-		bt4.addActionListener(new ActionEvent1(input, output));
+		bt1.addActionListener(new ActionEvent1(input, output, "원"));
+        bt2.addActionListener(new ActionEvent1(input, output, "삼각형"));
+        bt3.addActionListener(new ActionEvent1(input, output, "사각형"));
+        bt4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                input.setText("");  // 리셋 버튼 클릭 시 입력 필드 초기화
+                output.setText(""); // 결과 텍스트 에어리어 초기화
+            }
+        });
 		
 		//화면에 보이기
 		setTitle("도형의 넓이 구하기 - 송인석");
@@ -104,6 +88,39 @@ class Exam2 extends JFrame{
 		//화면에 출력
 		setVisible(true);
 	}
+}
+
+class ActionEvent1 implements ActionListener {
+    private JTextField inputField;
+    private JTextArea outputArea;
+    private String shape;
+
+    public ActionEvent1(JTextField inputField, JTextArea outputArea, String shape) {
+        this.inputField = inputField;
+        this.outputArea = outputArea;
+        this.shape = shape;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            String inputText = inputField.getText();  
+            int length = Integer.parseInt(inputText);
+            if (shape.equals("원")) {//원일경우 출력
+                double area = length*length*3.14;
+                outputArea.setText("원의 넓이: " + length + " x " + length + " x 3.14 " + "= " + area );
+            } else if (shape.equals("삼각형")) {//삼각형일경우 출력
+                double area = length*length;
+                area = area/2;
+                outputArea.setText("삼각형의 넓이: " + length + " x " + length + " / 2 " + "= " + area);
+            } else if (shape.equals("사각형")) {//사각형일경우 출력
+                double area = length*length;
+                outputArea.setText("사각형의 넓이: " + length + " x " + length + " = " + area);
+            }
+        } catch (NumberFormatException ex) {//빈칸, 문자열일경우 출력
+            outputArea.setText("길이(숫자)를 입력하셔야 합니다.");
+        }
+    }
 }
 
 public class Exam02 {
